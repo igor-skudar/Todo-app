@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import deleteIcon from "./assets/delete-icon.svg";
 
 export default function App() {
   const [filter, setFilter] = useState("all");
-  const [allTasks, setAllTasks] = useState([{ id: Date.now(), text: "Welcome to my ToDo app", completed: false }]);
+  const [allTasks, setAllTasks] = useState(() => {
+    const saved = localStorage.getItem("tasks");
+    return saved ? JSON.parse(saved) : [{ id: Date.now(), text: "Welcome to my ToDo app", completed: false }]});
   const [inputValue, setInputValue] = useState("");
   const [theme, setTheme] = useState("light");
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(allTasks));
+  }, [allTasks]);
 
   function toggleTheme() {
     setTheme(theme === "light" ? "dark" : "light");
