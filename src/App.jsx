@@ -7,15 +7,10 @@ export default function App() {
     const saved = localStorage.getItem("tasks");
     return saved ? JSON.parse(saved) : [{ id: Date.now(), text: "Welcome to my ToDo app", completed: false }]});
   const [inputValue, setInputValue] = useState("");
-  const [theme, setTheme] = useState("light");
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(allTasks));
   }, [allTasks]);
-
-  function toggleTheme() {
-    setTheme(theme === "light" ? "dark" : "light");
-  };
 
   function addTask() {
     if (!inputValue.trim()) {
@@ -57,11 +52,8 @@ export default function App() {
   }
   
   return (
-    <div className="App" data-theme={theme}>
-      <button className="themeToggle" onClick={toggleTheme}>
-        {theme === "light" ? "🌙" : "☀️"}
-      </button>
-      <h1 style={{marginBottom: (filter === "active" || filter === "completed") ? "var(--space-lg)" : "var(--space-sm)"}}>ToDo App</h1>
+    <div className="App">
+      <h1>Tasks</h1>
       {!(filter === "active" || filter === "completed") && (
         <p className="taskCount">
           {allTasks.filter(task => !task.completed).length} of {allTasks.length} tasks left
@@ -78,7 +70,7 @@ export default function App() {
         }
       }}
       />
-      <button onClick={addTask}>+ Add</button>
+      <button className="addBtn" onClick={addTask}>+ Add</button>
       <div className="filterMenu">
         <button 
           className={filter === "all" ? "active" : ""} 
@@ -101,13 +93,13 @@ export default function App() {
             <span style={{textDecoration: task.completed ? "line-through" : "none"}}>
               {task.text}
             </span>
-            <button aria-label="Delete task" onClick={()=> deleteTask(task.id)}>
+            <button className="deleteTaskBtn" aria-label="Delete task" onClick={()=> deleteTask(task.id)}>
               <img src={deleteIcon} className="deleteIcon" alt="" />
             </button>
           </li>
         ))}
       </ul>
-      <button className="clearBtn" onClick={clearCompleted}>Clear completed</button>
+      <button className="deleteCompletedBtn" onClick={clearCompleted}>Clear completed</button>
     </div>
   );
 };
