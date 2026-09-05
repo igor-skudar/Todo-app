@@ -59,18 +59,20 @@ export default function App() {
           {allTasks.filter(task => !task.completed).length} of {allTasks.length} tasks left
         </p>
       )}
-      <input 
-        type="text" 
-        placeholder="Add a new task" 
-        value={inputValue}
-        onChange={e => setInputValue(e.target.value)}
-        onKeyDown={e => {
-        if (e.key === "Enter") {
-          addTask();
-        }
-      }}
-      />
-      <button className="addBtn" onClick={addTask}>+ Add</button>
+      <div className="inputContainer">
+        <input 
+          type="text" 
+          placeholder="Add a new task" 
+          value={inputValue}
+          onChange={e => setInputValue(e.target.value)}
+          onKeyDown={e => {
+          if (e.key === "Enter") {
+            addTask();
+          }
+        }}
+        />
+        <button className="addBtn" onClick={addTask}>+ Add</button>
+      </div>
       <div className="filterMenu">
         <button 
           className={filter === "all" ? "active" : ""} 

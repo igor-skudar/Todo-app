@@ -3,13 +3,14 @@
   /* Colors */
   --color-bg: hsl(240, 6%, 10%);
   --color-surface: hsl(240, 5%, 15%);
-  --color-border: #35353a;
-  --color-primary: #ececea;
-  --color-secondary: #9a9a97;
-  --color-accent: #6b8fff;
-  --color-accent-hover: #7f9dff;
-  --color-danger: #ef6b58;
-  --color-danger-hover: #f47f6d;
+  --color-surface-hover: hsl(240, 5%, 19%);
+  --color-border: hsl(240, 5%, 44%);
+  --color-primary: hsl(60, 5%, 92%);
+  --color-secondary: hsl(60, 1%, 60%);
+  --color-accent: hsl(240, 70%, 55%);
+  --color-accent-hover: hsl(240, 77%, 60%);
+  --color-danger: hsl(8, 83%, 64%);
+  --color-danger-hover: hsl(8, 86%, 69%);
 
 
   /* Spacing */
@@ -35,6 +36,10 @@
   --radius-md: 10px;
   --radius-lg: 16px;
 
+  /* Shadow */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 20px 40px -12px rgba(0, 0, 0, 0.5);
+
   /* Transition */
   --transition-fast: 0.15s ease;
   --transition-slow: 0.25s ease;
@@ -44,7 +49,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-
 }
 
 ul, ol {
@@ -65,56 +69,247 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   background-color: var(--color-bg);
   color: var(--color-primary);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .App {
+  width: min(90vw, 560px);
   background-color: var(--color-surface);
   padding: var(--space-lg);
   border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
+  gap: var(--space-md);
   max-height: calc(100vh - (2 * var(--space-xl)));
 
 }
 
 h1 {
   font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-xl);
 }
 
 .taskCount {
   color: var(--color-secondary);
+  font-size: var(--font-size-sm);
+  margin-top: calc(-1 * var(--space-sm));
+}
+
+.inputContainer {
+  display: flex;
+  gap: var(--space-md);
+}
+
+input[type="text"] {
+  background-color: var(--color-bg);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: calc(var(--space-sm) * 1.5)  var(--space-md);
+  color: var(--color-primary);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  flex: 85;
+}
+
+input[type="text"]::placeholder {
+  color: var(--color-secondary);
+}
+
+input[type="text"]:hover:not(:focus) {
+  border-color: var(--color-secondary);
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: var(--color-accent);
 }
 
 .addBtn {
+  flex: 15;
   background-color: var(--color-accent);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-lg);
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.addBtn:hover {
+  background-color: var(--color-accent-hover);
+}
+
+.addBtn:active {
+  transform: scale(0.98);
+}
+
+.filterMenu {
+  display: flex;
+  gap: var(--space-xs);
+  background-color: var(--color-bg);
+  padding: var(--space-xs);
+  border-radius: var(--radius-md);
+}
+
+.filterMenu button {
+  flex: 1;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  color: var(--color-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  transition: var(--transition-fast);
+}
+
+.filterMenu button:hover:not(.active) {
+  color: var(--color-primary);
+}
+
+.filterMenu button.active {
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
 }
 
 ul {
   flex: 1;
-  min-height: 10px;
+  min-height: 0;
   overflow-y: auto;
   padding-right: var(--space-sm);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+ul:hover {
+  scrollbar-color: var(--color-border);
+}
+
+ul::-webkit-scrollbar {
+  width: 6px;
+}
+
+ul::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: 3px;
+}
+
+ul::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-secondary);
 }
 
 li {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  padding: var(--space-sm) 0;
+  padding: var(--space-sm);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
+  border-bottom: 2px solid var(--color-border);
+}
+
+li:hover {
+  background-color: var(--color-surface-hover);
 }
 
 li span {
   flex: 1;
+  transition: color var(--transition-fast);
+}
+
+li:has(input[type="checkbox"]:checked) span {
+  color: var(--color-secondary);
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  border: 2px solid var(--color-secondary);
+  border-radius: var(--radius-sm);
+  position: relative;
+  transition: var(--transition-fast);
+}
+
+input[type="checkbox"]:hover {
+  border-color: var(--color-accent);
+}
+
+input[type="checkbox"]:checked {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 4px;
+  height: 8px;
+  border: solid var(--color-primary);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 .deleteTaskBtn {
   margin-left: auto;
+  padding: var(--space-xs);
+  border-radius: 100px;
+  transition: var(--transition-fast);
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--color-border);
+  opacity: 0.7;
+}
+
+.deleteTaskBtn:hover {
+  opacity: 1;
+  background-color: var(--color-danger);
+}
+
+.deleteTaskBtn:active {
+  background-color: var(--color-danger-hover);
+  transform: scale(0.95);
 }
 
 .deleteIcon {
-  width: 10px;
+  width: 0.8rem;
+}
+
+.deleteCompletedBtn {
+  align-self: flex-end;
+  padding: var(--space-xs) var(--space-sm);
+  color: var(--color-primary);
+  opacity: 0.8;
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-sm);
+  transition: var(--transition-fast);
+}
+
+.deleteCompletedBtn:hover {
+  opacity: 1;
+  color: var(--color-danger);
+}
+
+@media (max-width: 480px) {
+  .App {
+    width: 95vw;
+    padding: var(--space-md);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
 }
